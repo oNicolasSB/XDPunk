@@ -11,7 +11,7 @@ int xdp_redirect_prog(struct xdp_md *ctx)
     if (OUTPUT_PORT == 0)
         return XDP_PASS;
 
-    return bpf_redirect(ifindex_out, 0);
+    return bpf_redirect(OUTPUT_PORT, 0);
 }
 
 char _license[] SEC("license") = "GPL";
