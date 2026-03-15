@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/bin/bash
 set -euo pipefail
 
 NS1="ns1"
@@ -15,7 +15,7 @@ echo "======================================"
 echo "[1/7] Removendo programas eBPF do namespace do switch..."
 if ip netns list | grep -q "$NSSW"; then
     for dev in veth1s veth2s veth3s; do
-        # Remover XDP (nativo e genérico)
+        # Remover XDP (nativo e genÃ©rico)
         ip netns exec "$NSSW" ip link set dev "$dev" xdp off 2>/dev/null || true
         ip netns exec "$NSSW" ip link set dev "$dev" xdpgeneric off 2>/dev/null || true
         # Remover filtros TC (clsact)
@@ -42,11 +42,13 @@ for dev in $(ip -o link show | awk -F': ' '{print $2}' | cut -d'@' -f1); do
     ip link set dev "$dev" xdp off 2>/dev/null || true
 done
 
-echo "[5/7] Limpando arquivos temporários..."
+echo "[5/7] Limpando arquivos temporÃ¡rios e pins BPF..."
+rm -rf /sys/fs/bpf/xdp_fwd_maps
 rm -f /tmp/xdp_switch.c \
       /tmp/xdp_switch.o \
       /tmp/xdp_forward.c \
       /tmp/xdp_forward.o \
+      /tmp/xdp_forward_dynamic.o \
       /tmp/tc_forward.c \
       /tmp/tc_forward.o \
       /tmp/tc_redirect.c \
@@ -59,4 +61,4 @@ echo "[7/7] Verificando mapas BPF restantes (informativo)..."
 bpftool map show 2>/dev/null || true
 
 echo
-echo "✅ Ambiente completamente limpo com sucesso!"
+echo "âœ… Ambiente completamente limpo com sucesso!"
