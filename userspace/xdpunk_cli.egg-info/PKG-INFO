@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: xdpunk-cli
+Version: 0.2.0
+Summary: CLI de plano de controle do XDPunk: rotas, firewall stateless e load balancer de links WAN
+Requires-Python: >=3.8

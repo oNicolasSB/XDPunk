@@ -1,12 +1,15 @@
 [build-system]
 requires = ["setuptools>=64"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "xdpunk-cli"
-version = "0.1.0"
-description = "CLI para gerenciamento da tabela de rotas BPF do XDPunk"
+version = "0.2.0"
+description = "CLI de plano de controle do XDPunk: rotas, firewall stateless e load balancer de links WAN"
 requires-python = ">=3.8"
 
 [project.scripts]
-xdpunk-cli = "xdpunk_cli:main"
+xdpunk-cli = "xdpunk_cli.cli:main"
+
+[tool.setuptools]
+packages = ["xdpunk_cli"]
