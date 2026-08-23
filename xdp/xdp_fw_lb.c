@@ -31,7 +31,7 @@
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_endian.h>
 
-#define MAX_FW_RULES  64
+#define MAX_FW_RULES  2048
 #define MAX_WAN_LINKS 4
 
 #define FW_ACTION_ALLOW 0
@@ -183,6 +183,48 @@ static __always_inline void rewrite_macs(struct ethhdr *eth,
     __builtin_memcpy(eth->h_source, (void *)smac, ETH_ALEN);
 }
 
+/*
+ * Contexto e callback do scan de firewall via bpf_loop().
+ *
+ * bpf_loop() verifica o corpo do callback UMA ÚNICA VEZ (subprograma
+ * independente), em vez de o verificador explorar N iterações do loop
+ * estaticamente — isso evita estourar BPF_COMPLEXITY_LIMIT_JMP_SEQ (8192)
+ * para MAX_FW_RULES grande. A iteração real acontece em runtime no kernel.
+ */
+struct fw_scan_ctx {
+    __u32 saddr, daddr;
+    __u16 sport, dport;
+    __u8  proto;
+    __u8  drop;         /* 1 = pacote deve ser dropado */
+    __u8  matched;       /* 1 = alguma regra deu match (parou o scan) */
+    __u32 matched_idx;   /* índice da regra que deu match (p/ fw_stats) */
+};
+
+static long fw_scan_cb(__u32 i, void *ctx)
+{
+    struct fw_scan_ctx *c = ctx;
+    struct fw_rule *r = bpf_map_lookup_elem(&fw_rules, &i);
+
+    if (!r || !r->enabled)
+        return 0;
+    if (r->proto && r->proto != c->proto)
+        return 0;
+    if ((c->saddr & r->src_mask) != r->src_ip)
+        return 0;
+    if ((c->daddr & r->dst_mask) != r->dst_ip)
+        return 0;
+    if (r->src_port && r->src_port != c->sport)
+        return 0;
+    if (r->dst_port && r->dst_port != c->dport)
+        return 0;
+
+    c->matched = 1;
+    c->matched_idx = i;
+    if (r->action == FW_ACTION_DROP)
+        c->drop = 1;
+    return 1;   /* first-match: para o loop */
+}
+
 SEC("xdp")
 int xdp_fw_lb(struct xdp_md *ctx)
 {
@@ -264,7 +306,8 @@ int xdp_fw_lb(struct xdp_md *ctx)
     /*
      * FIREWALL — scan linear, first-match; índice do array = prioridade.
      * Nenhuma regra casando → política default ALLOW.
-     * O loop para em fw_config.num_rules (bounded loop nativo, kernel 5.3+).
+     * O loop para em fw_config.num_rules, executado via bpf_loop() (kernel
+     * 5.17+) para não estourar BPF_COMPLEXITY_LIMIT_JMP_SEQ com N grande.
      */
     __u32 zero = 0;
     struct fw_config *fc = bpf_map_lookup_elem(&fw_config, &zero);
@@ -272,30 +315,18 @@ int xdp_fw_lb(struct xdp_md *ctx)
     if (num_rules > MAX_FW_RULES)
         num_rules = MAX_FW_RULES;
 
-    for (__u32 i = 0; i < MAX_FW_RULES; i++) {
-        if (i >= num_rules)
-            break;
+    struct fw_scan_ctx fw_ctx = {
+        .saddr = saddr, .daddr = daddr,
+        .sport = sport, .dport = dport, .proto = proto,
+    };
+    bpf_loop(num_rules, fw_scan_cb, &fw_ctx, 0);
 
-        struct fw_rule *r = bpf_map_lookup_elem(&fw_rules, &i);
-        if (!r || !r->enabled)
-            continue;
-        if (r->proto && r->proto != proto)
-            continue;
-        if ((saddr & r->src_mask) != r->src_ip)
-            continue;
-        if ((daddr & r->dst_mask) != r->dst_ip)
-            continue;
-        if (r->src_port && r->src_port != sport)
-            continue;
-        if (r->dst_port && r->dst_port != dport)
-            continue;
-
-        bump_stat(&fw_stats, i, pkt_len);
-        if (r->action == FW_ACTION_DROP) {
+    if (fw_ctx.matched) {
+        bump_stat(&fw_stats, fw_ctx.matched_idx, pkt_len);
+        if (fw_ctx.drop) {
             bump_stat(&global_stats, STAT_FW_DROP, pkt_len);
             return XDP_DROP;
         }
-        break;                    /* ALLOW explícito: para o scan */
     }
 
     /* Rede local conhecida: hit na route_table → redirect com MAC rewrite. */

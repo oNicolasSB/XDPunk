@@ -20,7 +20,7 @@ from bcc import BPF
 DEFAULT_PIN_DIR = "/sys/fs/bpf/xdpunk"
 LEGACY_MAP_PIN = "/sys/fs/bpf/xdp_fwd_maps/route_table"
 
-MAX_FW_RULES = 64
+MAX_FW_RULES = 2048
 MAX_WAN_LINKS = 4
 
 FW_ACTION_ALLOW = 0
@@ -54,9 +54,9 @@ struct stat_val { u64 packets; u64 bytes; };
 
 _TABLE_DECLS = {
     "route_table": 'BPF_TABLE_PINNED("hash", u32, struct route_entry, route_table, 256, "{d}/route_table");',
-    "fw_rules": 'BPF_TABLE_PINNED("array", u32, struct fw_rule, fw_rules, 64, "{d}/fw_rules");',
+    "fw_rules": f'BPF_TABLE_PINNED("array", u32, struct fw_rule, fw_rules, {MAX_FW_RULES}, "{{d}}/fw_rules");',
     "fw_config": 'BPF_TABLE_PINNED("array", u32, struct fw_config, fw_config, 1, "{d}/fw_config");',
-    "fw_stats": 'BPF_TABLE_PINNED("percpu_array", u32, struct stat_val, fw_stats, 64, "{d}/fw_stats");',
+    "fw_stats": f'BPF_TABLE_PINNED("percpu_array", u32, struct stat_val, fw_stats, {MAX_FW_RULES}, "{{d}}/fw_stats");',
     "wan_links": 'BPF_TABLE_PINNED("array", u32, struct wan_link, wan_links, 4, "{d}/wan_links");',
     "lb_config": 'BPF_TABLE_PINNED("array", u32, struct lb_config, lb_config, 1, "{d}/lb_config");',
     "rr_state": 'BPF_TABLE_PINNED("array", u32, u64, rr_state, 1, "{d}/rr_state");',

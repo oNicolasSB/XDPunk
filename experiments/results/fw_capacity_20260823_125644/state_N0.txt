@@ -1,0 +1,11 @@
+Nenhuma regra de firewall configurada (politica default: ALLOW).
+
+CONTADOR       PKTS           BYTES
+--------------------------------------------
+TOTAL          145058070      210041866025
+ARP            28             1176
+FW_DROP        0              0
+LAN_REDIRECT   145058038      210041864569
+WAN_REDIRECT   0              0
+PASS           4              280
+LB_NO_LINK     0              0

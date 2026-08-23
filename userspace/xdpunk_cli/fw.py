@@ -8,9 +8,15 @@ fw_config.num_rules = maior indice habilitado + 1: o scan do XDP para
 nesse ponto, fazendo o custo escalar com N regras (experimento Q1).
 """
 
+import ipaddress
 import sys
 
 from . import maps
+
+# Faixa de benchmarking RFC 2544 (nao roteavel em producao) usada como src
+# das regras sinteticas do `loadgen`: garante que nenhuma regra case com o
+# trafego real de teste (10.0.0.0/24), isolando o custo puro do scan.
+_LOADGEN_BASE_NET = ipaddress.ip_network("198.18.0.0/15")
 
 _FW_TABLES = ["fw_rules", "fw_config", "fw_stats"]
 
@@ -115,6 +121,60 @@ def cmd_list(args):
     print("\nPolitica default (sem match): ALLOW")
 
 
+def cmd_loadgen(args):
+    """Carrega N regras sinteticas nao-casantes num unico processo.
+
+    Usado pelos benchmarks de capacidade (1000/2000 regras): escrever N
+    regras via ~N chamadas de subprocess desperdicaria minutos em overhead
+    de startup/BCC. Aqui tudo roda dentro de um unico BPF() ja aberto.
+
+    Padrao das regras (pior caso, nenhuma casa de fato): src IP sequencial
+    dentro de 198.18.0.0/15 (RFC 2544), /32, proto TCP, dport 9, acao DROP.
+    Todo pacote de teste percorre o scan completo e cai na politica default
+    ALLOW. Sobrescreve os indices 0..N-1; assume tabela previamente
+    limpa (`fw flush`) para que `fw_config.num_rules` reflita exatamente N.
+    """
+    n = args.n
+    if not 0 <= n <= maps.MAX_FW_RULES:
+        print(f"Erro: N deve estar em 0..{maps.MAX_FW_RULES}.", file=sys.stderr)
+        sys.exit(1)
+    if n > _LOADGEN_BASE_NET.num_addresses:
+        print(
+            f"Erro: N={n} excede os enderecos disponiveis em "
+            f"{_LOADGEN_BASE_NET} ({_LOADGEN_BASE_NET.num_addresses}).",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    tables = _open(args)
+    rules = tables["fw_rules"]
+
+    base_ip = int(_LOADGEN_BASE_NET.network_address)
+    mask_full = maps.ip_to_u32("255.255.255.255")
+    dport = maps.port_to_u16(9)
+    proto_tcp = maps.PROTO_NAMES["tcp"]
+
+    for i in range(n):
+        leaf = rules.Leaf()
+        leaf.src_ip = maps.ip_to_u32(str(ipaddress.ip_address(base_ip + i)))
+        leaf.src_mask = mask_full
+        leaf.dst_port = dport
+        leaf.proto = proto_tcp
+        leaf.action = maps.FW_ACTION_DROP
+        leaf.enabled = 1
+        rules[rules.Key(i)] = leaf
+
+    cfg_tbl = tables["fw_config"]
+    cfg = cfg_tbl.Leaf()
+    cfg.num_rules = n
+    cfg_tbl[cfg_tbl.Key(0)] = cfg
+
+    print(
+        f"{n} regra(s) de teste carregada(s) (nao-casantes: src "
+        f"{_LOADGEN_BASE_NET} sequencial /32, tcp, dport 9, DROP)."
+    )
+
+
 def cmd_flush(args):
     tables = _open(args)
     rules = tables["fw_rules"]
@@ -183,3 +243,19 @@ def register(sub):
 
     p_flush = fw_sub.add_parser("flush", help="Remover todas as regras")
     p_flush.set_defaults(func=cmd_flush)
+
+    p_loadgen = fw_sub.add_parser(
+        "loadgen",
+        help="Carregar N regras sinteticas nao-casantes (benchmarks de capacidade)",
+        epilog=(
+            "Escreve N regras num unico processo (evita overhead de subprocess\n"
+            "por regra). Todas nao-casam de proposito, isolando o custo do scan.\n"
+            "Recomendado rodar `fw flush` antes.\n\n"
+            "Exemplo:\n"
+            "  xdpunk-cli fw flush && xdpunk-cli fw loadgen 2000"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    p_loadgen.add_argument("n", type=int,
+                           help=f"Numero de regras a carregar (0..{maps.MAX_FW_RULES})")
+    p_loadgen.set_defaults(func=cmd_loadgen)
