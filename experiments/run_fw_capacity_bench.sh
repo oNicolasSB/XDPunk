@@ -51,14 +51,49 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# Causa raiz confirmada (ver historico): o iperf3 tem um bug conhecido
+# (select failed: Bad file descriptor -> "the server has terminated") que
+# o relatorio periodico de intervalo (-i, default 1s) em socket dual-stack
+# expoe quando o teste roda mais devagar/mais tempo que o pedido — exatamente
+# o que acontece em N alto (scan linear do firewall degrada o throughput por
+# fluxo). "-4 -i 0" (IPv4 puro, sem relatorio de intervalo) elimina o bug
+# (validado: 10/10 sucesso em N=2000, duracao exata, sem esse fix a taxa de
+# falha passava de 90%). restart_iperf_server/run_iperf3 seguem como rede de
+# seguranca para qualquer outra falha transitoria, mas nao devem mais ser
+# necessarios na pratica.
+restart_iperf_server() {
+  [[ -n "$SERVER_PID" ]] && kill "$SERVER_PID" 2>/dev/null
+  wait "$SERVER_PID" 2>/dev/null || true
+  ip netns exec ns2 iperf3 -s -4 >/dev/null 2>&1 &
+  SERVER_PID=$!
+  sleep 1
+}
+
+run_iperf3() {  # run_iperf3 <arquivo_json_saida> <args do iperf3...>
+  local out="$1"; shift
+  local attempt ec err
+  local -r max_attempts=15
+  for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+    ec=0
+    ip netns exec ns1 iperf3 -4 -i 0 --json "$@" > "$out" 2>"${out}.stderr" || ec=$?
+    err="$(jq -r '.error // empty' "$out" 2>/dev/null)" || err="invalid_json"
+    if [[ "$ec" -eq 0 && -z "$err" ]]; then
+      rm -f "${out}.stderr"
+      return 0
+    fi
+    echo "  [aviso] iperf3 falhou (tentativa $attempt/$max_attempts, exit=$ec, error='$err') — reiniciando servidor e tentando de novo" >&2
+    restart_iperf_server
+  done
+  echo "  [ERRO] iperf3 continuou falhando apos $max_attempts tentativas: $out" >&2
+  return 1
+}
+
 echo "== Benchmark de capacidade do firewall XDP =="
 echo "N ∈ {${RULE_COUNTS[*]}} regra(s), $REPS repeticao(oes) por cenario"
 echo "Resultados em: $OUT"
 
 echo "Iniciando servidor iperf3 em ns2..."
-ip netns exec ns2 iperf3 -s >/dev/null 2>&1 &
-SERVER_PID=$!
-sleep 1
+restart_iperf_server
 
 extract_ping_avg() {  # extract_ping_avg <arquivo> -> RTT medio (ms)
   local line
@@ -75,6 +110,7 @@ for N in "${RULE_COUNTS[@]}"; do
   xdpunk-cli fw flush >/dev/null
   xdpunk-cli fw loadgen "$N" >/dev/null
   xdpunk-cli stats --reset >/dev/null
+  restart_iperf_server
 
   : > "$OUT/throughput_N${N}.csv"
   : > "$OUT/latency_N${N}.csv"
@@ -89,15 +125,14 @@ for N in "${RULE_COUNTS[@]}"; do
 
     # Throughput: TCP, DUR segundos
     tcp_file="$OUT/tcp_N${N}_r${rep}.json"
-    ip netns exec ns1 iperf3 -c 10.0.0.2 -t "$TCP_DUR" --json > "$tcp_file"
+    run_iperf3 "$tcp_file" -c 10.0.0.2 -t "$TCP_DUR"
     bps="$(jq '.end.sum_received.bits_per_second' "$tcp_file")"
     echo "$bps" >> "$OUT/throughput_N${N}.csv"
 
     # Jitter: UDP, bitrate fixo (nao satura o link, isola o jitter de
     # enfileiramento/scan e nao o de congestionamento)
     udp_file="$OUT/udp_N${N}_r${rep}.json"
-    ip netns exec ns1 iperf3 -u -b "$UDP_BW" -t "$UDP_DUR" -c 10.0.0.2 --json \
-      > "$udp_file"
+    run_iperf3 "$udp_file" -u -b "$UDP_BW" -t "$UDP_DUR" -c 10.0.0.2
     jitter="$(jq '.end.sum.jitter_ms' "$udp_file")"
     echo "$jitter" >> "$OUT/jitter_N${N}.csv"
 

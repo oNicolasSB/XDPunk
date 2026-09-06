@@ -1,0 +1,18 @@
+Chain FORWARD (policy ACCEPT 496693341 packets, 484228328691 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       0        0 DROP       6    --  *      *       198.18.0.1           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.2           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.3           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.4           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.5           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.6           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.7           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.8           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.9           0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.10          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.11          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.12          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.13          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.14          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.15          0.0.0.0/0            tcp dpt:9
+       0        0 DROP       6    --  *      *       198.18.0.16          0.0.0.0/0            tcp dpt:9

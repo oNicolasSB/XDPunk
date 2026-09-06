@@ -1,0 +1,22 @@
+PRIO  ACAO   PROTO  ORIGEM               SPORT  DESTINO              DPORT  PKTS       BYTES
+--------------------------------------------------------------------------------------------
+0     DROP   tcp    198.18.0.1/32        any    any                  9      0          0
+1     DROP   tcp    198.18.0.2/32        any    any                  9      0          0
+2     DROP   tcp    198.18.0.3/32        any    any                  9      0          0
+3     DROP   tcp    198.18.0.4/32        any    any                  9      0          0
+4     DROP   tcp    198.18.0.5/32        any    any                  9      0          0
+5     DROP   tcp    198.18.0.6/32        any    any                  9      0          0
+6     DROP   tcp    198.18.0.7/32        any    any                  9      0          0
+7     DROP   tcp    198.18.0.8/32        any    any                  9      0          0
+
+Politica default (sem match): ALLOW
+
+CONTADOR       PKTS           BYTES
+--------------------------------------------
+TOTAL          19828667       19812884415
+ARP            2              84
+FW_DROP        0              0
+LAN_REDIRECT   19828664       19812884261
+WAN_REDIRECT   0              0
+PASS           1              70
+LB_NO_LINK     0              0

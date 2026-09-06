@@ -1,0 +1,45 @@
+PORTA    IDA (R1)   VOLTA (R4) SIMETRICO
+10001    R3         R2         nao
+32911    R2         R2         sim
+33227    R3         R3         sim
+33305    R2         R2         sim
+33831    R2         R2         sim
+35111    R3         R3         sim
+36101    R3         R2         nao
+36815    R3         R3         sim
+37723    R3         R2         nao
+37783    R3         R2         nao
+37983    R2         R3         nao
+38447    R2         R2         sim
+39071    R2         R3         nao
+41625    R2         R3         nao
+42287    R3         R2         nao
+43289    R3         R3         sim
+44065    R2         R3         nao
+45591    R2         R3         nao
+47345    R2         R2         sim
+47363    R3         R3         sim
+48273    R2         R2         sim
+48495    R3         R2         nao
+49057    R3         R2         nao
+49699    R2         R3         nao
+51301    R2         R3         nao
+52427    R2         R2         sim
+52901    R2         R3         nao
+52949    R2         R2         sim
+53317    R2         R3         nao
+53331    R2         R3         nao
+53731    R3         R2         nao
+54813    R2         R2         sim
+55227    R3         R3         sim
+55733    R3         R2         nao
+57191    R3         R3         sim
+57281    R3         R3         sim
+57345    R2         R2         sim
+57389    R2         R2         sim
+57991    R2         R3         nao
+58177    R3         R2         nao
+58313    R3         R2         nao
+
+Fluxos observados (ida e volta capturadas): 41
+Taxa de simetria observada: 0.4634 (19/41)

@@ -62,7 +62,7 @@ echo "== Benchmark de firewall — modo=$MODE reps=$REPS duracao=${DUR}s =="
 echo "Resultados em: $OUT"
 
 echo "Iniciando servidor iperf3 em ns2..."
-ip netns exec ns2 iperf3 -s >/dev/null 2>&1 &
+ip netns exec ns2 iperf3 -s -4 >/dev/null 2>&1 &
 SERVER_PID=$!
 sleep 1
 
@@ -78,14 +78,17 @@ for N in "${RULE_COUNTS[@]}"; do
     [[ "$MODE" == "xdp" ]] && xdpunk-cli stats --reset >/dev/null
 
     # Q1a: throughput TCP
-    ip netns exec ns1 iperf3 -c 10.0.0.2 -t "$DUR" --json \
+    # -4 -i 0: evita um bug conhecido do iperf3 (select failed: Bad file
+    # descriptor / duracao do teste inflada) que o relatorio periodico de
+    # intervalo (-i) e sockets dual-stack expunham sob throughput reduzido.
+    ip netns exec ns1 iperf3 -4 -i 0 -c 10.0.0.2 -t "$DUR" --json \
       > "$OUT/tcp_N${N}_r${rep}.json"
     tput_bps=$(jq '.end.sum_received.bits_per_second' \
       "$OUT/tcp_N${N}_r${rep}.json")
     echo "  TCP  N=$N rep=$rep: $(awk "BEGIN{printf \"%.2f\", $tput_bps/1e9}") Gbit/s"
 
     # Q1b: pps com UDP 64 bytes (estressa o custo por pacote)
-    ip netns exec ns1 iperf3 -u -b 0 -l 64 -c 10.0.0.2 -t "$DUR" --json \
+    ip netns exec ns1 iperf3 -4 -i 0 -u -b 0 -l 64 -c 10.0.0.2 -t "$DUR" --json \
       > "$OUT/udp64_N${N}_r${rep}.json"
     pkts=$(jq '.end.sum.packets' "$OUT/udp64_N${N}_r${rep}.json")
     echo "  UDP64 N=$N rep=$rep: $(awk "BEGIN{printf \"%.0f\", $pkts/$DUR}") pps"

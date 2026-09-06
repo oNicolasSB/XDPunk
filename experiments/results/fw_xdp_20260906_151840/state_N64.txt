@@ -1,0 +1,78 @@
+PRIO  ACAO   PROTO  ORIGEM               SPORT  DESTINO              DPORT  PKTS       BYTES
+--------------------------------------------------------------------------------------------
+0     DROP   tcp    198.18.0.1/32        any    any                  9      0          0
+1     DROP   tcp    198.18.0.2/32        any    any                  9      0          0
+2     DROP   tcp    198.18.0.3/32        any    any                  9      0          0
+3     DROP   tcp    198.18.0.4/32        any    any                  9      0          0
+4     DROP   tcp    198.18.0.5/32        any    any                  9      0          0
+5     DROP   tcp    198.18.0.6/32        any    any                  9      0          0
+6     DROP   tcp    198.18.0.7/32        any    any                  9      0          0
+7     DROP   tcp    198.18.0.8/32        any    any                  9      0          0
+8     DROP   tcp    198.18.0.9/32        any    any                  9      0          0
+9     DROP   tcp    198.18.0.10/32       any    any                  9      0          0
+10    DROP   tcp    198.18.0.11/32       any    any                  9      0          0
+11    DROP   tcp    198.18.0.12/32       any    any                  9      0          0
+12    DROP   tcp    198.18.0.13/32       any    any                  9      0          0
+13    DROP   tcp    198.18.0.14/32       any    any                  9      0          0
+14    DROP   tcp    198.18.0.15/32       any    any                  9      0          0
+15    DROP   tcp    198.18.0.16/32       any    any                  9      0          0
+16    DROP   tcp    198.18.0.17/32       any    any                  9      0          0
+17    DROP   tcp    198.18.0.18/32       any    any                  9      0          0
+18    DROP   tcp    198.18.0.19/32       any    any                  9      0          0
+19    DROP   tcp    198.18.0.20/32       any    any                  9      0          0
+20    DROP   tcp    198.18.0.21/32       any    any                  9      0          0
+21    DROP   tcp    198.18.0.22/32       any    any                  9      0          0
+22    DROP   tcp    198.18.0.23/32       any    any                  9      0          0
+23    DROP   tcp    198.18.0.24/32       any    any                  9      0          0
+24    DROP   tcp    198.18.0.25/32       any    any                  9      0          0
+25    DROP   tcp    198.18.0.26/32       any    any                  9      0          0
+26    DROP   tcp    198.18.0.27/32       any    any                  9      0          0
+27    DROP   tcp    198.18.0.28/32       any    any                  9      0          0
+28    DROP   tcp    198.18.0.29/32       any    any                  9      0          0
+29    DROP   tcp    198.18.0.30/32       any    any                  9      0          0
+30    DROP   tcp    198.18.0.31/32       any    any                  9      0          0
+31    DROP   tcp    198.18.0.32/32       any    any                  9      0          0
+32    DROP   tcp    198.18.0.33/32       any    any                  9      0          0
+33    DROP   tcp    198.18.0.34/32       any    any                  9      0          0
+34    DROP   tcp    198.18.0.35/32       any    any                  9      0          0
+35    DROP   tcp    198.18.0.36/32       any    any                  9      0          0
+36    DROP   tcp    198.18.0.37/32       any    any                  9      0          0
+37    DROP   tcp    198.18.0.38/32       any    any                  9      0          0
+38    DROP   tcp    198.18.0.39/32       any    any                  9      0          0
+39    DROP   tcp    198.18.0.40/32       any    any                  9      0          0
+40    DROP   tcp    198.18.0.41/32       any    any                  9      0          0
+41    DROP   tcp    198.18.0.42/32       any    any                  9      0          0
+42    DROP   tcp    198.18.0.43/32       any    any                  9      0          0
+43    DROP   tcp    198.18.0.44/32       any    any                  9      0          0
+44    DROP   tcp    198.18.0.45/32       any    any                  9      0          0
+45    DROP   tcp    198.18.0.46/32       any    any                  9      0          0
+46    DROP   tcp    198.18.0.47/32       any    any                  9      0          0
+47    DROP   tcp    198.18.0.48/32       any    any                  9      0          0
+48    DROP   tcp    198.18.0.49/32       any    any                  9      0          0
+49    DROP   tcp    198.18.0.50/32       any    any                  9      0          0
+50    DROP   tcp    198.18.0.51/32       any    any                  9      0          0
+51    DROP   tcp    198.18.0.52/32       any    any                  9      0          0
+52    DROP   tcp    198.18.0.53/32       any    any                  9      0          0
+53    DROP   tcp    198.18.0.54/32       any    any                  9      0          0
+54    DROP   tcp    198.18.0.55/32       any    any                  9      0          0
+55    DROP   tcp    198.18.0.56/32       any    any                  9      0          0
+56    DROP   tcp    198.18.0.57/32       any    any                  9      0          0
+57    DROP   tcp    198.18.0.58/32       any    any                  9      0          0
+58    DROP   tcp    198.18.0.59/32       any    any                  9      0          0
+59    DROP   tcp    198.18.0.60/32       any    any                  9      0          0
+60    DROP   tcp    198.18.0.61/32       any    any                  9      0          0
+61    DROP   tcp    198.18.0.62/32       any    any                  9      0          0
+62    DROP   tcp    198.18.0.63/32       any    any                  9      0          0
+63    DROP   tcp    198.18.0.64/32       any    any                  9      0          0
+
+Politica default (sem match): ALLOW
+
+CONTADOR       PKTS           BYTES
+--------------------------------------------
+TOTAL          16687949       15961574012
+ARP            2              84
+FW_DROP        0              0
+LAN_REDIRECT   16687947       15961573928
+WAN_REDIRECT   0              0
+PASS           0              0
+LB_NO_LINK     0              0
