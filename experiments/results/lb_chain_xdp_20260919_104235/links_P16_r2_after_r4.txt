@@ -1,0 +1,6 @@
+LB WAN: ativo | modo: hash | num_links: 2
+
+SLOT  Interface  ifindex  estado   smac               dmac               PKTS       BYTES        %
+----------------------------------------------------------------------------------------------------
+0     vethR42    23       on       ae:12:29:7c:c7:13  62:e0:e7:cb:da:07  473584     31262612      57.2
+1     vethR43    25       on       c6:30:31:4a:8c:01  46:3d:84:c7:24:9d  355063     23438338      42.8

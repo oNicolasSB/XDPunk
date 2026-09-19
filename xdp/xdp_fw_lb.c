@@ -184,6 +184,47 @@ static __always_inline void rewrite_macs(struct ethhdr *eth,
 }
 
 /*
+ * Hash de fluxo (5-tupla) com avalanche completo (FNV-1a + finalizador
+ * estilo Murmur3 fmix32).
+ *
+ * BUG CORRIGIDO: a versao anterior empacotava as portas como
+ * `(sport << 16) | dport` e aplicava um unico multiplicativo de
+ * Fibonacci, lendo o indice em `(h >> 16) % num_links`. Multiplicacao
+ * de inteiros so propaga "carry" das posicoes de bit menos
+ * significativas para as mais significativas — nunca ao contrario.
+ * Como `sport` ficava nos bits 16-31 de entrada, qualquer variacao
+ * exclusiva em `sport` (o caso comum: o cliente LAN varia a porta de
+ * origem a cada conexao, servidor com porta fixa) nunca conseguia
+ * alterar o bit 16 do produto, colapsando ~100% dos fluxos paralelos
+ * no mesmo link WAN (confirmado nos benchmarks Q3: throughput agregado
+ * do LB XDP nao escalava com o numero de fluxos paralelos, ficando
+ * preso a capacidade de um unico link, enquanto o ECMP do kernel
+ * escalava linearmente com o numero de links).
+ *
+ * O finalizador abaixo espalha cada bit de entrada por todos os bits
+ * de saida, entao `% num_links` funciona corretamente mesmo quando
+ * num_links nao e potencia de dois.
+ */
+static __always_inline __u32 flow_hash(__u32 saddr, __u32 daddr,
+                                        __u16 sport, __u16 dport, __u8 proto)
+{
+    __u32 h = 0x811C9DC5U; /* FNV-1a offset basis */
+
+    h = (h ^ saddr) * 0x01000193U;
+    h = (h ^ daddr) * 0x01000193U;
+    h = (h ^ (__u32)sport) * 0x01000193U;
+    h = (h ^ (__u32)dport) * 0x01000193U;
+    h = (h ^ (__u32)proto) * 0x01000193U;
+
+    h ^= h >> 16;
+    h *= 0x7FEB352DU;
+    h ^= h >> 15;
+    h *= 0x846CA68BU;
+    h ^= h >> 16;
+    return h;
+}
+
+/*
  * Contexto e callback do scan de firewall via bpf_loop().
  *
  * bpf_loop() verifica o corpo do callback UMA ÚNICA VEZ (subprograma
@@ -362,13 +403,11 @@ int xdp_fw_lb(struct xdp_md *ctx)
         idx = (__u32)__sync_fetch_and_add(ctr, 1) % num_links;
     } else {
         /*
-         * Hash de fluxo (5-tupla) multiplicativo de Fibonacci/Knuth:
-         * afinidade de fluxo análoga ao ECMP L4 do kernel. ICMP tem
-         * portas 0 → afinidade pelo par origem/destino.
+         * Hash de fluxo (5-tupla) com avalanche completo: afinidade de
+         * fluxo análoga ao ECMP L4 do kernel. ICMP tem portas 0 →
+         * afinidade pelo par origem/destino.
          */
-        __u32 h = saddr ^ daddr ^ (((__u32)sport << 16) | dport) ^ proto;
-        h *= 0x9E3779B1U;
-        idx = (h >> 16) % num_links;
+        idx = flow_hash(saddr, daddr, sport, dport, proto) % num_links;
     }
 
     /* Failover: pula links desabilitados a partir do escolhido. */
