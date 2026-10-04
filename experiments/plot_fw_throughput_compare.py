@@ -56,22 +56,42 @@ def discover_n_values(results_dir: Path):
     return sorted(ns)
 
 
-def read_gbps(results_dir: Path, n: int, reps: int):
+def _tcp_gbps(end):
+    return end["sum_received"]["bits_per_second"] / 1e9
+
+
+def _udp_kpps(end):
+    """Pacotes entregues por segundo no receptor, em milhares."""
+    rcv = end["sum_received"]
+    return (rcv["packets"] - rcv["lost_packets"]) / rcv["seconds"] / 1e3
+
+
+# metrica -> (prefixo do arquivo, extrator, rotulo do eixo y, unidade, titulo)
+METRICS = {
+    "tcp": ("tcp", _tcp_gbps, "Throughput TCP (Gbit/s)", "Gbit/s",
+            "Throughput TCP vs N — XDP vs iptables"),
+    "pps": ("udp64", _udp_kpps, "Pacotes UDP 64 B entregues (kpps)", "kpps",
+            "Taxa de pacotes UDP 64 B vs N — XDP vs iptables"),
+}
+
+
+def read_values(results_dir: Path, n: int, reps: int, metric: str):
+    prefix, extract = METRICS[metric][:2]
     values = []
     for rep in range(1, reps + 1):
-        path = results_dir / f"tcp_N{n}_r{rep}.json"
+        path = results_dir / f"{prefix}_N{n}_r{rep}.json"
         if not path.exists():
             continue
         with open(path) as f:
             data = json.load(f)
-        values.append(data["end"]["sum_received"]["bits_per_second"] / 1e9)
+        values.append(extract(data["end"]))
     return values
 
 
-def collect(results_dir: Path, reps: int):
+def collect(results_dir: Path, reps: int, metric: str = "tcp"):
     per_n = {}
     for n in discover_n_values(results_dir):
-        values = read_gbps(results_dir, n, reps)
+        values = read_values(results_dir, n, reps, metric)
         if values:
             per_n[n] = values
         else:
@@ -92,7 +112,7 @@ def linear_fit(per_n):
     return slope, intercept, r_squared
 
 
-def plot_series(ax, per_n, color, label, jitter_span, rng):
+def plot_series(ax, per_n, color, label, jitter_span, rng, unit="Gbit/s"):
     n_values = sorted(per_n.keys())
     means = np.array([np.mean(per_n[n]) for n in n_values])
 
@@ -118,8 +138,8 @@ def plot_series(ax, per_n, color, label, jitter_span, rng):
         linestyle="--", alpha=0.6, zorder=1,
         label=f"{label} — ajuste linear (R²={r_squared:.3f})",
     )
-    print(f"{label}: throughput(N) ≈ {slope:.6f} × N + {intercept:.4f} "
-          f"(Gbit/s)  |  R² = {r_squared:.4f}")
+    print(f"{label}: valor(N) ≈ {slope:.6f} × N + {intercept:.4f} "
+          f"({unit})  |  R² = {r_squared:.4f}")
     return n_values
 
 
@@ -135,16 +155,23 @@ def main():
     parser.add_argument("--reps", type=int, default=10)
     parser.add_argument("--out", type=Path, default=None,
                         help="Caminho do PNG de saida (default: "
-                             "<xdp>/fw_throughput_compare.png)")
+                             "<xdp>/fw_throughput_compare.png, ou "
+                             "fw_pps_compare.png com --metric pps)")
+    parser.add_argument("--metric", choices=sorted(METRICS), default="tcp",
+                        help="tcp = throughput TCP (default); pps = taxa de "
+                             "pacotes UDP 64 B entregues")
+    parser.add_argument("--title-suffix", default="LAN→LAN",
+                        help="Texto entre parenteses no fim do titulo")
     args = parser.parse_args()
+    ylabel, unit, title = METRICS[args.metric][2:]
 
     for d in (args.xdp, args.baseline):
         if not d.is_dir():
             print(f"Erro: '{d}' nao e um diretorio.", file=sys.stderr)
             sys.exit(1)
 
-    xdp_per_n = collect(args.xdp, args.reps)
-    baseline_per_n = collect(args.baseline, args.reps)
+    xdp_per_n = collect(args.xdp, args.reps, args.metric)
+    baseline_per_n = collect(args.baseline, args.reps, args.metric)
     if not xdp_per_n or not baseline_per_n:
         print("Erro: sem dados suficientes para plotar.", file=sys.stderr)
         sys.exit(1)
@@ -158,12 +185,12 @@ def main():
 
     rng = np.random.default_rng(0)
     plot_series(ax, baseline_per_n, COLOR_BASELINE, "iptables (kernel)",
-                jitter_span, rng)
-    plot_series(ax, xdp_per_n, COLOR_XDP, "XDP", jitter_span, rng)
+                jitter_span, rng, unit)
+    plot_series(ax, xdp_per_n, COLOR_XDP, "XDP", jitter_span, rng, unit)
 
     ax.set_xlabel("N (regras de firewall carregadas)", color=INK_SECONDARY)
-    ax.set_ylabel("Throughput TCP (Gbit/s)", color=INK_SECONDARY)
-    ax.set_title("Throughput TCP vs N — XDP vs iptables (LAN→LAN)",
+    ax.set_ylabel(ylabel, color=INK_SECONDARY)
+    ax.set_title(f"{title} ({args.title_suffix})",
                  color=INK_PRIMARY, fontsize=13, fontweight="bold", pad=14)
     ax.set_xlim(min(all_n) - jitter_span * 3, max(all_n) + jitter_span * 3)
     ax.set_ylim(bottom=0)
@@ -181,7 +208,9 @@ def main():
         ncol=2, frameon=False, labelcolor=INK_SECONDARY, fontsize=9,
     )
 
-    out_path = args.out or (args.xdp / "fw_throughput_compare.png")
+    default_name = ("fw_throughput_compare.png" if args.metric == "tcp"
+                    else f"fw_{args.metric}_compare.png")
+    out_path = args.out or (args.xdp / default_name)
     fig.savefig(out_path, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     print(f"Gerado: {out_path}")

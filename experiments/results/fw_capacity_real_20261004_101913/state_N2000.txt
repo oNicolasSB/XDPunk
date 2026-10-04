@@ -1,0 +1,13 @@
+1999  DROP   tcp    198.18.7.207/32      any    any                  9      0          0
+
+Politica default (sem match): ALLOW
+
+CONTADOR       PKTS           BYTES
+--------------------------------------------
+TOTAL          85611617       82521201240
+ARP            94             5640
+FW_DROP        0              0
+LAN_REDIRECT   85610725       82521121042
+WAN_REDIRECT   0              0
+PASS           892            80198
+LB_NO_LINK     0              0

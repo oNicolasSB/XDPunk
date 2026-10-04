@@ -2,8 +2,8 @@
 """plot_fw_capacity.py — graficos do benchmark de capacidade do firewall XDP.
 
 Le os dados brutos gerados por run_fw_capacity_bench.sh (CSVs de 20
-execucoes por cenario N ∈ {0, 1000, 2000} regras) e produz 3 graficos de
-barra (throughput, latencia, jitter): media ± desvio-padrao, com os pontos
+execucoes por cenario N ∈ {0, 1000, 2000} regras) e produz graficos de
+barra (throughput, latencia, jitter e, quando presente, pps): media ± desvio-padrao, com os pontos
 individuais das execucoes sobrepostos (scatter) para evidenciar outliers.
 Outliers (regra 1.5×IQR) sao destacados com marcador e cor distintos.
 
@@ -47,6 +47,10 @@ METRICS = [
      lambda bps: bps / 1e9),
     ("latency", "Latência (RTT)", "RTT médio (ms)", lambda ms: ms),
     ("jitter", "Jitter (UDP, 200 Mbit/s)", "Jitter (ms)", lambda ms: ms),
+    # So existe nos resultados de run_fw_capacity_bench_real.sh (3 VMs);
+    # ausente nos do lab em netns — a metrica e pulada com aviso.
+    ("pps", "Taxa de encaminhamento (UDP 64 B, saturante)",
+     "Pacotes entregues (kpps)", lambda pps: pps / 1e3),
 ]
 
 
@@ -141,7 +145,7 @@ def plot_metric(prefix, title, ylabel, convert, results_dir: Path, out_dir: Path
         # Deslocado para a direita, fora da faixa de jitter dos pontos
         # (±0.12), para nao colidir com eles.
         ax.text(
-            xi + 0.16, mean + std, f"{mean:.2f}",
+            xi + 0.16, mean + std, f"{mean:.3g}",
             ha="left", va="center", fontsize=9, color=INK_SECONDARY,
             zorder=5,
         )
@@ -187,7 +191,7 @@ def plot_metric(prefix, title, ylabel, convert, results_dir: Path, out_dir: Path
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("results_dir", type=Path,
-                        help="Diretorio com os CSVs de run_fw_capacity_bench.sh")
+                        help="Diretorio com os CSVs de run_fw_capacity_bench[_real].sh")
     parser.add_argument("--out-dir", type=Path, default=None,
                         help="Diretorio de saida dos PNGs (default: results_dir)")
     args = parser.parse_args()

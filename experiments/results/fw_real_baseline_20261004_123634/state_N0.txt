@@ -1,0 +1,4 @@
+Chain FORWARD (policy ACCEPT 50611189 packets, 21822033896 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+...
+2

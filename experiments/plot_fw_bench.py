@@ -32,7 +32,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Grade de N: descoberta a partir dos arquivos tcp_N*_r*.json dos dois
+# diretorios (main); este e o default do lab em netns.
 RULE_COUNTS = [0, 8, 16, 32, 64]
+_N_RE = re.compile(r"tcp_N(\d+)_r\d+\.json$")
 
 INK_PRIMARY = "#0b0b0b"
 INK_SECONDARY = "#52514e"
@@ -61,12 +64,31 @@ def tcp_gbps(results_dir: Path, n: int, rep: int):
 
 
 def udp_pps(results_dir: Path, n: int, rep: int, duration_s: float):
+    """Pacotes ENTREGUES por segundo (lado receptor).
+
+    Com -b 0 o emissor pode gerar mais do que o switch encaminha; o que
+    mede o firewall e o que chega ao servidor (packets - lost_packets).
+    JSONs sem sum_received (iperf3 antigo): contagem do emissor / duracao.
+    """
     path = results_dir / f"udp64_N{n}_r{rep}.json"
     if not path.exists():
         return None
     with open(path) as f:
         data = json.load(f)
+    rcv = data["end"].get("sum_received")
+    if rcv and rcv.get("seconds"):
+        return (rcv["packets"] - rcv["lost_packets"]) / rcv["seconds"]
     return data["end"]["sum"]["packets"] / duration_s
+
+
+def discover_rule_counts(*dirs):
+    ns = set()
+    for d in dirs:
+        for p in d.glob("tcp_N*_r*.json"):
+            m = _N_RE.search(p.name)
+            if m:
+                ns.add(int(m.group(1)))
+    return sorted(ns)
 
 
 def ping_rtt_avg_mdev(results_dir: Path, n: int):
@@ -150,8 +172,12 @@ def _style_axes(ax, ylabel, title):
     ax.tick_params(axis="both", colors=INK_MUTED, length=0)
 
 
+def _fig_width():
+    return max(7.0, 0.9 * len(RULE_COUNTS))
+
+
 def plot_reps_metric(xdp_by_n, baseline_by_n, out_path: Path, ylabel, title):
-    fig, ax = plt.subplots(figsize=(7, 5), dpi=150)
+    fig, ax = plt.subplots(figsize=(_fig_width(), 5), dpi=150)
     fig.patch.set_facecolor(SURFACE)
     ax.set_facecolor(SURFACE)
 
@@ -179,7 +205,7 @@ def plot_reps_metric(xdp_by_n, baseline_by_n, out_path: Path, ylabel, title):
 
 
 def plot_ping_metric(xdp_by_n, baseline_by_n, out_path: Path, ylabel, title):
-    fig, ax = plt.subplots(figsize=(7, 5), dpi=150)
+    fig, ax = plt.subplots(figsize=(_fig_width(), 5), dpi=150)
     fig.patch.set_facecolor(SURFACE)
     ax.set_facecolor(SURFACE)
 
@@ -221,6 +247,8 @@ def main():
                         help="Duracao (s) de cada execucao do iperf3 UDP, "
                              "para converter pacotes em pps (default: 30)")
     parser.add_argument("--out-dir", type=Path, default=None)
+    parser.add_argument("--title-suffix", default="LAN→LAN",
+                        help="Texto entre parenteses no fim dos titulos")
     args = parser.parse_args()
 
     for d in (args.xdp, args.baseline):
@@ -230,6 +258,10 @@ def main():
 
     out_dir = args.out_dir or args.xdp
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    global RULE_COUNTS
+    RULE_COUNTS = discover_rule_counts(args.xdp, args.baseline) or RULE_COUNTS
+    sfx = args.title_suffix
 
     xdp_tput = collect_reps(args.xdp, args.reps, tcp_gbps)
     baseline_tput = collect_reps(args.baseline, args.reps, tcp_gbps)
@@ -247,17 +279,17 @@ def main():
     plot_reps_metric(
         xdp_tput, baseline_tput, out_dir / "fw_bench_throughput.png",
         "Throughput TCP (Gbit/s)",
-        "Firewall — throughput TCP vs regras carregadas (LAN→LAN)",
+        f"Firewall — throughput TCP vs regras carregadas ({sfx})",
     )
     plot_reps_metric(
         xdp_pps, baseline_pps, out_dir / "fw_bench_pps.png",
-        "Taxa de pacotes UDP 64B (pps)",
-        "Firewall — pps UDP 64B vs regras carregadas (LAN→LAN)",
+        "Taxa de pacotes UDP 64B entregues (pps)",
+        f"Firewall — pps UDP 64B vs regras carregadas ({sfx})",
     )
     plot_ping_metric(
         xdp_ping, baseline_ping, out_dir / "fw_bench_latency.png",
         "RTT médio ± mdev (ms)",
-        "Firewall — latência (ping) vs regras carregadas (LAN→LAN)",
+        f"Firewall — latência (ping) vs regras carregadas ({sfx})",
     )
 
 

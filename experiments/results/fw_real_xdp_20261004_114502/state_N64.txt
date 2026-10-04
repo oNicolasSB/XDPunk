@@ -1,0 +1,9 @@
+CONTADOR       PKTS           BYTES
+--------------------------------------------
+TOTAL          50328602       22519245933
+ARP            29             1740
+FW_DROP        0              0
+LAN_REDIRECT   50328327       22519216591
+WAN_REDIRECT   0              0
+PASS           275            29342
+LB_NO_LINK     0              0
