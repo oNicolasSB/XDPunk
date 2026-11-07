@@ -1,0 +1,6 @@
+LB WAN: ativo | modo: hash | num_links: 2
+
+SLOT  Interface  ifindex  estado   smac               dmac               PKTS       BYTES        %
+----------------------------------------------------------------------------------------------------
+0     ens21      5        on       bc:24:11:bb:c4:6d  bc:24:11:04:e0:68  393482     26002606      40.4
+1     ens20      4        on       bc:24:11:b2:41:2a  bc:24:11:25:cc:d5  581387     38423570      59.6

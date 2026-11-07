@@ -1,0 +1,46 @@
+1794065691.812712 IP 10.10.1.1.37993 > 10.10.2.1.5201: Flags [S], seq 152431473, win 64240, options [mss 1460,sackOK,TS val 2509118390 ecr 0,nop,wscale 9], length 0
+1794065691.812721 IP 10.10.2.1.5201 > 10.10.1.1.56595: Flags [S.], seq 3354839347, ack 3561792792, win 65160, options [mss 1460,sackOK,TS val 2775457700 ecr 1740619931,nop,wscale 8], length 0
+1794065691.813232 IP 10.10.1.1.52765 > 10.10.2.1.5201: Flags [S], seq 75341630, win 64240, options [mss 1460,sackOK,TS val 2523915727 ecr 0,nop,wscale 9], length 0
+1794065691.813845 IP 10.10.2.1.5201 > 10.10.1.1.52765: Flags [S.], seq 1350989279, ack 75341631, win 65160, options [mss 1460,sackOK,TS val 2453578049 ecr 2523915727,nop,wscale 8], length 0
+1794065691.813895 IP 10.10.1.1.40443 > 10.10.2.1.5201: Flags [S], seq 1347869650, win 64240, options [mss 1460,sackOK,TS val 219969246 ecr 0,nop,wscale 9], length 0
+1794065691.814377 IP 10.10.2.1.5201 > 10.10.1.1.38327: Flags [S.], seq 1391681697, ack 1121903565, win 65160, options [mss 1460,sackOK,TS val 2590186666 ecr 2582020596,nop,wscale 8], length 0
+1794065691.814417 IP 10.10.2.1.5201 > 10.10.1.1.40443: Flags [S.], seq 2792342347, ack 1347869651, win 65160, options [mss 1460,sackOK,TS val 1331698337 ecr 219969246,nop,wscale 8], length 0
+1794065691.815938 IP 10.10.2.1.5201 > 10.10.1.1.58817: Flags [S.], seq 99432916, ack 2471235992, win 65160, options [mss 1460,sackOK,TS val 1139452209 ecr 2664555975,nop,wscale 8], length 0
+1794065691.816587 IP 10.10.1.1.52981 > 10.10.2.1.5201: Flags [S], seq 1935840917, win 64240, options [mss 1460,sackOK,TS val 3402408084 ecr 0,nop,wscale 9], length 0
+1794065691.820321 IP 10.10.1.1.38157 > 10.10.2.1.5201: Flags [S], seq 511203950, win 64240, options [mss 1460,sackOK,TS val 2062851153 ecr 0,nop,wscale 9], length 0
+1794065691.821626 IP 10.10.2.1.5201 > 10.10.1.1.10000: Flags [S.], seq 750372855, ack 3104849843, win 65160, options [mss 1460,sackOK,TS val 1047052356 ecr 537457347,nop,wscale 8], length 0
+1794065691.823383 IP 10.10.1.1.46179 > 10.10.2.1.5201: Flags [S], seq 393538309, win 64240, options [mss 1460,sackOK,TS val 817588782 ecr 0,nop,wscale 9], length 0
+1794065691.823783 IP 10.10.2.1.5201 > 10.10.1.1.46179: Flags [S.], seq 987860765, ack 393538310, win 65160, options [mss 1460,sackOK,TS val 673878740 ecr 817588782,nop,wscale 8], length 0
+1794065691.824116 IP 10.10.1.1.51513 > 10.10.2.1.5201: Flags [S], seq 1568670854, win 64240, options [mss 1460,sackOK,TS val 3346255036 ecr 0,nop,wscale 9], length 0
+1794065691.824628 IP 10.10.2.1.5201 > 10.10.1.1.51513: Flags [S.], seq 2463312914, ack 1568670855, win 65160, options [mss 1460,sackOK,TS val 3298335975 ecr 3346255036,nop,wscale 8], length 0
+1794065691.824811 IP 10.10.2.1.5201 > 10.10.1.1.36583: Flags [S.], seq 2799823899, ack 3564937835, win 65160, options [mss 1460,sackOK,TS val 3616010630 ecr 3138276533,nop,wscale 8], length 0
+1794065691.825721 IP 10.10.2.1.5201 > 10.10.1.1.38411: Flags [S.], seq 39384816, ack 2391180497, win 65160, options [mss 1460,sackOK,TS val 1727091230 ecr 334233618,nop,wscale 8], length 0
+1794065691.835426 IP 10.10.1.1.36251 > 10.10.2.1.5201: Flags [S], seq 3168589561, win 64240, options [mss 1460,sackOK,TS val 1956802646 ecr 0,nop,wscale 9], length 0
+1794065691.835866 IP 10.10.2.1.5201 > 10.10.1.1.36251: Flags [S.], seq 412924227, ack 3168589562, win 65160, options [mss 1460,sackOK,TS val 2339461386 ecr 1956802646,nop,wscale 8], length 0
+1794065691.840479 IP 10.10.1.1.53569 > 10.10.2.1.5201: Flags [S], seq 1064699606, win 64240, options [mss 1460,sackOK,TS val 718987840 ecr 0,nop,wscale 9], length 0
+1794065691.846979 IP 10.10.1.1.52059 > 10.10.2.1.5201: Flags [S], seq 3301804531, win 64240, options [mss 1460,sackOK,TS val 1936193900 ecr 0,nop,wscale 9], length 0
+1794065691.847484 IP 10.10.2.1.5201 > 10.10.1.1.38115: Flags [S.], seq 2220227916, ack 2163587841, win 65160, options [mss 1460,sackOK,TS val 2475475056 ecr 308176531,nop,wscale 8], length 0
+1794065691.849773 IP 10.10.1.1.43171 > 10.10.2.1.5201: Flags [S], seq 1163103396, win 64240, options [mss 1460,sackOK,TS val 3629330460 ecr 0,nop,wscale 9], length 0
+1794065691.849992 IP 10.10.2.1.5201 > 10.10.1.1.43171: Flags [S.], seq 521143279, ack 1163103397, win 65160, options [mss 1460,sackOK,TS val 3466574529 ecr 3629330460,nop,wscale 8], length 0
+1794065691.851136 IP 10.10.1.1.38409 > 10.10.2.1.5201: Flags [S], seq 840445073, win 64240, options [mss 1460,sackOK,TS val 1222669813 ecr 0,nop,wscale 9], length 0
+1794065691.851381 IP 10.10.2.1.5201 > 10.10.1.1.38409: Flags [S.], seq 1474587590, ack 840445074, win 65160, options [mss 1460,sackOK,TS val 3391917066 ecr 1222669813,nop,wscale 8], length 0
+1794065691.851967 IP 10.10.2.1.5201 > 10.10.1.1.57669: Flags [S.], seq 2749912894, ack 3468562241, win 65160, options [mss 1460,sackOK,TS val 4203524086 ecr 3896560220,nop,wscale 8], length 0
+1794065691.852525 IP 10.10.2.1.5201 > 10.10.1.1.58359: Flags [S.], seq 3666202610, ack 365409259, win 65160, options [mss 1460,sackOK,TS val 1233534658 ecr 1570772541,nop,wscale 8], length 0
+1794065691.853569 IP 10.10.1.1.48527 > 10.10.2.1.5201: Flags [S], seq 3959072885, win 64240, options [mss 1460,sackOK,TS val 4239471383 ecr 0,nop,wscale 9], length 0
+1794065691.853811 IP 10.10.2.1.5201 > 10.10.1.1.48527: Flags [S.], seq 648965539, ack 3959072886, win 65160, options [mss 1460,sackOK,TS val 1104290591 ecr 4239471383,nop,wscale 8], length 0
+1794065691.853858 IP 10.10.1.1.56649 > 10.10.2.1.5201: Flags [S], seq 1799851512, win 64240, options [mss 1460,sackOK,TS val 2365836927 ecr 0,nop,wscale 9], length 0
+1794065691.854500 IP 10.10.1.1.47197 > 10.10.2.1.5201: Flags [S], seq 3093682041, win 64240, options [mss 1460,sackOK,TS val 666314021 ecr 0,nop,wscale 9], length 0
+1794065691.854928 IP 10.10.2.1.5201 > 10.10.1.1.52957: Flags [S.], seq 2260178368, ack 1137169693, win 65160, options [mss 1460,sackOK,TS val 100203825 ecr 3226065098,nop,wscale 8], length 0
+1794065691.855493 IP 10.10.1.1.38381 > 10.10.2.1.5201: Flags [S], seq 2670691896, win 64240, options [mss 1460,sackOK,TS val 232548356 ecr 0,nop,wscale 9], length 0
+1794065691.855852 IP 10.10.2.1.5201 > 10.10.1.1.38381: Flags [S.], seq 2921108623, ack 2670691897, win 65160, options [mss 1460,sackOK,TS val 3253282786 ecr 232548356,nop,wscale 8], length 0
+1794065691.856163 IP 10.10.1.1.33339 > 10.10.2.1.5201: Flags [S], seq 221190623, win 64240, options [mss 1460,sackOK,TS val 3925427026 ecr 0,nop,wscale 9], length 0
+1794065691.856397 IP 10.10.2.1.5201 > 10.10.1.1.33339: Flags [S.], seq 3640080420, ack 221190624, win 65160, options [mss 1460,sackOK,TS val 2124632041 ecr 3925427026,nop,wscale 8], length 0
+1794065691.856838 IP 10.10.1.1.52915 > 10.10.2.1.5201: Flags [S], seq 1598352758, win 64240, options [mss 1460,sackOK,TS val 3547995048 ecr 0,nop,wscale 9], length 0
+1794065691.856983 IP 10.10.2.1.5201 > 10.10.1.1.53739: Flags [S.], seq 146272655, ack 1306790703, win 65160, options [mss 1460,sackOK,TS val 4111623185 ecr 197767062,nop,wscale 8], length 0
+1794065691.857189 IP 10.10.2.1.5201 > 10.10.1.1.52915: Flags [S.], seq 1384240400, ack 1598352759, win 65160, options [mss 1460,sackOK,TS val 3690861023 ecr 3547995048,nop,wscale 8], length 0
+1794065691.859090 IP 10.10.1.1.34731 > 10.10.2.1.5201: Flags [S], seq 913085431, win 64240, options [mss 1460,sackOK,TS val 741651662 ecr 0,nop,wscale 9], length 0
+1794065691.860682 IP 10.10.1.1.56013 > 10.10.2.1.5201: Flags [S], seq 3329154566, win 64240, options [mss 1460,sackOK,TS val 1282520272 ecr 0,nop,wscale 9], length 0
+1794065691.860935 IP 10.10.2.1.5201 > 10.10.1.1.56013: Flags [S.], seq 1408302018, ack 3329154567, win 65160, options [mss 1460,sackOK,TS val 4202531389 ecr 1282520272,nop,wscale 8], length 0
+1794065691.861375 IP 10.10.2.1.5201 > 10.10.1.1.59739: Flags [S.], seq 2999648205, ack 2351456634, win 65160, options [mss 1460,sackOK,TS val 210553004 ecr 2109902382,nop,wscale 8], length 0
+1794065691.863095 IP 10.10.2.1.5201 > 10.10.1.1.58741: Flags [S.], seq 3848668761, ack 3399731881, win 65160, options [mss 1460,sackOK,TS val 1275032168 ecr 4129724061,nop,wscale 8], length 0
+

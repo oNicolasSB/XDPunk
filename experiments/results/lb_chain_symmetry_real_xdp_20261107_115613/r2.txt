@@ -1,0 +1,35 @@
+1794063378.309894 IP 10.10.1.1.44435 > 10.10.2.1.5201: Flags [S], seq 1580641728, win 64240, options [mss 1460,sackOK,TS val 2298552028 ecr 0,nop,wscale 9], length 0
+1794063378.310338 IP 10.10.2.1.5201 > 10.10.1.1.46645: Flags [S.], seq 3212659196, ack 1246045042, win 65160, options [mss 1460,sackOK,TS val 901807374 ecr 3469170252,nop,wscale 8], length 0
+1794063378.313316 IP 10.10.1.1.59707 > 10.10.2.1.5201: Flags [S], seq 2957594312, win 64240, options [mss 1460,sackOK,TS val 3549541534 ecr 0,nop,wscale 9], length 0
+1794063378.314762 IP 10.10.2.1.5201 > 10.10.1.1.55751: Flags [S.], seq 518834649, ack 3968713420, win 65160, options [mss 1460,sackOK,TS val 3100376904 ecr 3653837814,nop,wscale 8], length 0
+1794063378.315005 IP 10.10.1.1.51621 > 10.10.2.1.5201: Flags [S], seq 2930705017, win 64240, options [mss 1460,sackOK,TS val 3360578554 ecr 0,nop,wscale 9], length 0
+1794063378.315280 IP 10.10.1.1.49329 > 10.10.2.1.5201: Flags [S], seq 2969059809, win 64240, options [mss 1460,sackOK,TS val 3268662528 ecr 0,nop,wscale 9], length 0
+1794063378.316097 IP 10.10.2.1.5201 > 10.10.1.1.39221: Flags [S.], seq 1928640954, ack 1283319186, win 65160, options [mss 1460,sackOK,TS val 32974075 ecr 2300713355,nop,wscale 8], length 0
+1794063378.316715 IP 10.10.2.1.5201 > 10.10.1.1.44905: Flags [S.], seq 2473735858, ack 1577331492, win 65160, options [mss 1460,sackOK,TS val 2549651917 ecr 2449551170,nop,wscale 8], length 0
+1794063378.316747 IP 10.10.2.1.5201 > 10.10.1.1.33621: Flags [S.], seq 3208101093, ack 557507488, win 65160, options [mss 1460,sackOK,TS val 1100580783 ecr 4277508235,nop,wscale 8], length 0
+1794063378.317275 IP 10.10.2.1.5201 > 10.10.1.1.51295: Flags [S.], seq 2618491805, ack 1537537655, win 65160, options [mss 1460,sackOK,TS val 3805652169 ecr 3372123966,nop,wscale 8], length 0
+1794063378.318082 IP 10.10.2.1.5201 > 10.10.1.1.41679: Flags [S.], seq 2010597233, ack 3420387851, win 65160, options [mss 1460,sackOK,TS val 589119489 ecr 1931991671,nop,wscale 8], length 0
+1794063378.318326 IP 10.10.1.1.50247 > 10.10.2.1.5201: Flags [S], seq 3472264778, win 64240, options [mss 1460,sackOK,TS val 4111895911 ecr 0,nop,wscale 9], length 0
+1794063378.322069 IP 10.10.2.1.5201 > 10.10.1.1.43453: Flags [S.], seq 1027178283, ack 29254401, win 65160, options [mss 1460,sackOK,TS val 1280262300 ecr 2107389231,nop,wscale 8], length 0
+1794063378.323945 IP 10.10.1.1.59173 > 10.10.2.1.5201: Flags [S], seq 1146862835, win 64240, options [mss 1460,sackOK,TS val 2748953842 ecr 0,nop,wscale 9], length 0
+1794063378.324467 IP 10.10.2.1.5201 > 10.10.1.1.59173: Flags [S.], seq 1292292661, ack 1146862836, win 65160, options [mss 1460,sackOK,TS val 1491810786 ecr 2748953842,nop,wscale 8], length 0
+1794063378.324636 IP 10.10.1.1.47229 > 10.10.2.1.5201: Flags [S], seq 3107114724, win 64240, options [mss 1460,sackOK,TS val 2238210399 ecr 0,nop,wscale 9], length 0
+1794063378.325059 IP 10.10.2.1.5201 > 10.10.1.1.47229: Flags [S.], seq 2142610558, ack 3107114725, win 65160, options [mss 1460,sackOK,TS val 1847393922 ecr 2238210399,nop,wscale 8], length 0
+1794063378.325885 IP 10.10.1.1.52745 > 10.10.2.1.5201: Flags [S], seq 3588861857, win 64240, options [mss 1460,sackOK,TS val 1213036140 ecr 0,nop,wscale 9], length 0
+1794063378.326292 IP 10.10.2.1.5201 > 10.10.1.1.52745: Flags [S.], seq 1054645846, ack 3588861858, win 65160, options [mss 1460,sackOK,TS val 1826791062 ecr 1213036140,nop,wscale 8], length 0
+1794063378.327594 IP 10.10.1.1.43345 > 10.10.2.1.5201: Flags [S], seq 2800929062, win 64240, options [mss 1460,sackOK,TS val 3615374269 ecr 0,nop,wscale 9], length 0
+1794063378.328074 IP 10.10.2.1.5201 > 10.10.1.1.43345: Flags [S.], seq 2783589237, ack 2800929063, win 65160, options [mss 1460,sackOK,TS val 1207959902 ecr 3615374269,nop,wscale 8], length 0
+1794063378.328483 IP 10.10.1.1.55431 > 10.10.2.1.5201: Flags [S], seq 2133189247, win 64240, options [mss 1460,sackOK,TS val 1268764362 ecr 0,nop,wscale 9], length 0
+1794063378.329098 IP 10.10.2.1.5201 > 10.10.1.1.55431: Flags [S.], seq 2803907599, ack 2133189248, win 65160, options [mss 1460,sackOK,TS val 2875799550 ecr 1268764362,nop,wscale 8], length 0
+1794063378.338952 IP 10.10.1.1.39125 > 10.10.2.1.5201: Flags [S], seq 2539764485, win 64240, options [mss 1460,sackOK,TS val 790722846 ecr 0,nop,wscale 9], length 0
+1794063378.342518 IP 10.10.1.1.47597 > 10.10.2.1.5201: Flags [S], seq 130578506, win 64240, options [mss 1460,sackOK,TS val 1995567498 ecr 0,nop,wscale 9], length 0
+1794063378.342877 IP 10.10.2.1.5201 > 10.10.1.1.47597: Flags [S.], seq 203507423, ack 130578507, win 65160, options [mss 1460,sackOK,TS val 2976841962 ecr 1995567498,nop,wscale 8], length 0
+1794063378.348149 IP 10.10.1.1.49875 > 10.10.2.1.5201: Flags [S], seq 3477209684, win 64240, options [mss 1460,sackOK,TS val 2652503248 ecr 0,nop,wscale 9], length 0
+1794063378.351357 IP 10.10.2.1.5201 > 10.10.1.1.59273: Flags [S.], seq 3075628846, ack 4116230303, win 65160, options [mss 1460,sackOK,TS val 3434922853 ecr 670775869,nop,wscale 8], length 0
+1794063378.351887 IP 10.10.2.1.5201 > 10.10.1.1.38391: Flags [S.], seq 3750061427, ack 92584543, win 65160, options [mss 1460,sackOK,TS val 3039740470 ecr 1733800623,nop,wscale 8], length 0
+1794063378.355165 IP 10.10.1.1.44121 > 10.10.2.1.5201: Flags [S], seq 345525872, win 64240, options [mss 1460,sackOK,TS val 454275413 ecr 0,nop,wscale 9], length 0
+1794063378.361325 IP 10.10.1.1.59055 > 10.10.2.1.5201: Flags [S], seq 3784978062, win 64240, options [mss 1460,sackOK,TS val 305882184 ecr 0,nop,wscale 9], length 0
+1794063378.361670 IP 10.10.2.1.5201 > 10.10.1.1.59055: Flags [S.], seq 2678497216, ack 3784978063, win 65160, options [mss 1460,sackOK,TS val 3534004391 ecr 305882184,nop,wscale 8], length 0
+1794063378.364698 IP 10.10.1.1.39373 > 10.10.2.1.5201: Flags [S], seq 3487052738, win 64240, options [mss 1460,sackOK,TS val 3845475059 ecr 0,nop,wscale 9], length 0
+1794063378.367444 IP 10.10.2.1.5201 > 10.10.1.1.35291: Flags [S.], seq 3113066335, ack 2122388269, win 65160, options [mss 1460,sackOK,TS val 1908448221 ecr 3491125755,nop,wscale 8], length 0
+

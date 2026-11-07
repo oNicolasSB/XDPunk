@@ -48,7 +48,8 @@ XDP_COLOR = "#2a78d6"
 BASELINE_COLOR = "#eb6834"
 XDP_BEFORE_COLOR = "#1baf7a"
 
-WAN_IFACES = ("vethR12", "vethR13")  # links WAN de R1 na topologia encadeada
+# Links WAN de R1 na topologia encadeada (lab em netns); --wan-ifaces sobrescreve.
+WAN_IFACES = ["vethR12", "vethR13"]
 
 
 def throughput_gbps(results_dir: Path, p: int, rep: int):
@@ -222,7 +223,12 @@ def main():
                               "refatoracao), para uma comparacao de 3 series")
     parser.add_argument("--reps", type=int, default=10)
     parser.add_argument("--out-dir", type=Path, default=None)
+    parser.add_argument("--wan-ifaces", default=",".join(WAN_IFACES),
+                        help="Interfaces WAN de R1 (W0,W1) nos snapshots do baseline; "
+                             "lab em netns: vethR12,vethR13 (padrao), "
+                             "6 VMs reais: ens20,ens21")
     args = parser.parse_args()
+    WAN_IFACES[:] = args.wan_ifaces.split(",")
 
     dirs = [args.xdp_results_dir, args.baseline_results_dir]
     if args.xdp_before_dir:

@@ -1,0 +1,34 @@
+--- R1
+4: ens20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether bc:24:11:46:ff:30 brd ff:ff:ff:ff:ff:ff
+    RX:    bytes   packets errors dropped  missed   mcast           
+      2496874689  28897808      0       0       0       0 
+    TX:    bytes   packets errors dropped carrier collsns           
+    219996502711 186136973      0       0       0       0 
+    altname enp0s20
+    altname enxbc241146ff30
+5: ens21: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether bc:24:11:cd:f3:d9 brd ff:ff:ff:ff:ff:ff
+    RX:    bytes   packets errors dropped  missed   mcast           
+      1896304887  28576568      0       0       0       0 
+    TX:    bytes   packets errors dropped carrier collsns           
+    238975876867 192909910      0       0       0       0 
+    altname enp0s21
+    altname enxbc2411cdf3d9
+--- R4
+5: ens21: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether bc:24:11:bb:c4:6d brd ff:ff:ff:ff:ff:ff
+    RX:    bytes   packets errors dropped  missed   mcast           
+    218380931491 186102368      0       0       0       0 
+    TX:    bytes   packets errors dropped carrier collsns           
+      2792977699  28898741      0       0       0       0 
+    altname enp0s21
+    altname enxbc2411bbc46d
+4: ens20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether bc:24:11:b2:41:2a brd ff:ff:ff:ff:ff:ff
+    RX:    bytes   packets errors dropped  missed   mcast           
+    237132979317 192680147      0       0       0       0 
+    TX:    bytes   packets errors dropped carrier collsns           
+      2163874809  28571989      0       0       0       0 
+    altname enp0s20
+    altname enxbc2411b2412a

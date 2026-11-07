@@ -208,5 +208,6 @@ Implementation plan: `plano_firewall_loadbalancer.md`. Phase 1 artifacts remain 
   - `xdpunk-cli lb link add 0 vethw1s --dmac <MAC vethw1p>` / `lb mode hash|rr` / `lb link disable 0` (failover)
   - `xdpunk-cli stats --reset` (between benchmark rounds)
 - Docs: `docs/xdp_fw_lb.md`, `docs/setup_xdp_fw_lb.md`.
+- Real-VM labs (Proxmox): firewall on 3 VMs (`docs/setup_xdp_fw_real.md`) and chained LB on 6 VMs (`docs/setup_xdp_lb_chain_real.md`; config in `scripts/lb_chain_real.env`, orchestrator `scripts/setup_lb_chain_real.sh <xdp|baseline|reset>`, full battery `experiments/run_lb_real_all.sh`, all run from host1).
 - The two labs must not run simultaneously (LAN namespace/veth names overlap); `scripts/reset.sh` cleans both.
 
